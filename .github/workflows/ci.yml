@@ -33,6 +33,17 @@ jobs:
             cmp "$file" "skills/yomiyasu/scripts/${file##*/}" || status=1
           done
           exit "$status"
+      - name: plugins/yomiyasu/skills/yomiyasu matches skills/yomiyasu
+        run: diff -rq skills/yomiyasu plugins/yomiyasu/skills/yomiyasu
+
+  cursor-plugin:
+    name: Cursor plugin manifest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate the multi-plugin marketplace
+        run: node scripts/validate-template.mjs
 
   test:
     name: pytest (Python ${{ matrix.python-version }})

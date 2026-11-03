@@ -1,0 +1,16 @@
+{
+  "name": "yomiyasu",
+  "displayName": "yomiyasu",
+  "version": "2.5.0",
+  "description": "AIが生成した日本語を、意味と条件を保って読みやすく整えるスキル",
+  "author": {
+    "name": "nanaism",
+    "email": "datealife2525@gmail.com"
+  },
+  "homepage": "https://github.com/nanaism/yomiyasu",
+  "repository": "https://github.com/nanaism/yomiyasu",
+  "license": "MIT",
+  "keywords": ["japanese", "writing", "proofreading", "editing", "skills"],
+  "logo": "assets/logo.jpg",
+  "skills": "./skills/"
+}

@@ -465,12 +465,19 @@ class HookTests(ManagedCase):
         self.assertEqual(before, sorted(str(p) for p in self.root.rglob('*')))
 
     def test_h18_no_hook_declarations(self):
-        self.assertEqual(list(ROOT.rglob('SKILL.md')), [ROOT / 'skills' / 'yomiyasu' / 'SKILL.md'])
+        self.assertEqual(sorted(ROOT.rglob('SKILL.md')), [
+            ROOT / 'plugins' / 'yomiyasu' / 'skills' / 'yomiyasu' / 'SKILL.md',
+            ROOT / 'skills' / 'yomiyasu' / 'SKILL.md',
+        ])
         front = (ROOT / 'skills' / 'yomiyasu' / 'SKILL.md').read_text(encoding='utf-8').split('---')[1]
         self.assertNotIn('hooks:', front)
-        for path in (ROOT / 'hooks', ROOT / 'skills' / 'yomiyasu' / 'hooks', ROOT / '.codex-plugin'):
+        for path in (ROOT / 'hooks', ROOT / 'skills' / 'yomiyasu' / 'hooks', ROOT / '.codex-plugin',
+                     ROOT / 'plugins' / 'yomiyasu' / 'hooks'):
             self.assertFalse(path.exists())
-        manifests = list((ROOT / '.claude-plugin').glob('*.json')) + list((ROOT / 'skills' / 'yomiyasu' / '.codex-plugin').glob('*.json'))
+        manifests = (list((ROOT / '.claude-plugin').glob('*.json'))
+                     + list((ROOT / 'skills' / 'yomiyasu' / '.codex-plugin').glob('*.json'))
+                     + list((ROOT / '.cursor-plugin').glob('*.json'))
+                     + list((ROOT / 'plugins' / 'yomiyasu' / '.cursor-plugin').glob('*.json')))
         for path in manifests:
             self.assertNotIn('hooks', json.loads(path.read_text(encoding='utf-8')))
 

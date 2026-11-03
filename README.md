@@ -158,7 +158,7 @@ npx skills add nanaism/yomiyasu
 npx skills update yomiyasu
 ```
 
-Claude Codeなどのエージェントの設定ディレクトリへ、スキルをインストール・更新します。スキル定義は `skills/yomiyasu/SKILL.md` の1か所に配置しています。
+Claude Codeなどのエージェントの設定ディレクトリへ、スキルをインストール・更新します。スキル定義の原本は `skills/yomiyasu/SKILL.md` です。Cursor プラグインの `plugins/yomiyasu/skills/yomiyasu/` は、これと同じ内容の写しです。
 
 Grok Build に入れるときは、`-a grok` を付けます。`-g` を付けるとユーザーの `~/.grok/skills/yomiyasu/`（`GROK_HOME` を設定しているときはその下の `skills/`）に、付けないと作業するリポジトリの `.grok/skills/yomiyasu/` に入ります。更新は上と同じ `npx skills update yomiyasu` です（`-g` で入れたときは `-g` も付けます）。
 
@@ -263,6 +263,20 @@ mv .agents/yomiyasu.bak-20261024-153000 .agents/skills/yomiyasu
 
 この置き方では Codex がスキルを `yomiyasu:yomiyasu` という名前で一覧に載せます。呼ぶときは「/yomiyasu」とだけ送るか、依頼の文に「yomiyasu で」と書いてください。一覧の名前どおり `$yomiyasu:yomiyasu` と書いても呼べます。コピーしたフォルダは自動では新しくなりません。最新にするには、同じコマンドをもう一度実行してください。
 
+### 7. Cursor プラグイン
+
+このリポジトリは Cursor のマルチプラグイン形式です。入口は `.cursor-plugin/marketplace.json` で、プラグインは `plugins/yomiyasu/` です。中のスキルは `skills/yomiyasu/` と同じファイルです。プラグインを足すときは `plugins/` にフォルダを作り、`marketplace.json` の `plugins` に `source` を足します。
+
+チームのマーケットプレイスに入れるときは、Cursor の Dashboard の Plugins & MCPs から Add Marketplace を開き、Import from Repo に次の URL を貼ります。
+
+```text
+https://github.com/nanaism/yomiyasu
+```
+
+手元の Cursor で試すときは、`plugins/yomiyasu` を `~/.cursor/plugins/local/yomiyasu` へフォルダごとコピーし、Developer: Reload Window を実行します。リポジトリへのシンボリックリンクは読み込まれません。
+
+入れたスキルの名前は `yomiyasu` です。依頼の文に「yomiyasu で」と書くか、「/yomiyasu」と送って使います。
+
 ### スキルのフォルダの中を書き換えたとき
 
 入れたスキルのフォルダの中のファイルを書き換えても、入れ方によっては、更新するとフォルダの中身が入れ替わり、書き換えた所が残りません。プロジェクトに合わせた語や使い方の決まりは、スキルのフォルダの外の `.yomiyasu-words/`、`CLAUDE.md`、`AGENTS.md` に書いてください。
@@ -320,6 +334,18 @@ AI が書いたり直したりする日本語をいつも yomiyasu に通した�
 1つのリポジトリだけで使うならそのリポジトリの直下の `AGENTS.md` に、すべてのリポジトリで使うなら `~/.codex/AGENTS.md`（`CODEX_HOME` を設定しているときはその場所の `AGENTS.md`）に書きます。書いたあとに始めた会話から有効になります。
 
 コードや設定を直したあとの報告まで推敲させたいときは、「日本語の文章を書いたり直したりするときは、常に yomiyasu:yomiyasu スキルで推敲してください。」とだけ書きます。この書き方にすると、Codex は変数の名前を変えるだけの作業でも、最後の報告を書く前に yomiyasu を読みます。
+
+#### Cursor
+
+Cursor のプラグインで入れたスキルの名前は `yomiyasu` です。次の1行を書きます。
+
+```text
+記事、ドキュメント、PR の説明文、コミットメッセージなどの日本語の文章を書いたり直したりするときは、常に yomiyasu スキルで推敲してください。コードを直したあとの作業の報告には使わなくてかまいません。
+```
+
+1つのリポジトリだけで使うならそのリポジトリの直下の `AGENTS.md` に、すべてのリポジトリで使うなら Cursor の User Rules に書きます。書いたあとに始めた会話から有効になります。
+
+コードや設定を直したあとの報告まで推敲させたいときは、「日本語の文章を書いたり直したりするときは、常に yomiyasu スキルで推敲してください。」とだけ書きます。
 
 #### `npx openskills install` で入れたとき
 
@@ -522,7 +548,9 @@ Claude Code か Codex の設定に貼ったときだけ動く補助のスクリ�
 ├── .claude-plugin/                   # Claude Code用プラグイン設定
 │   ├── plugin.json
 │   └── marketplace.json
-├── .github/workflows/ci.yml          # 自動の試験（テスト一式と、2か所のファイルが同じかの確認）
+├── .cursor-plugin/                   # Cursor のマルチプラグインの入口
+│   └── marketplace.json
+├── .github/workflows/ci.yml          # 自動の試験（テスト一式と、写しが同じかの確認）
 ├── README.md                         # 本ドキュメント
 ├── README.en.md                      # 英語の短い紹介
 ├── CHANGELOG.md                      # 変更履歴（2.0.0 から）
@@ -538,6 +566,7 @@ Claude Code か Codex の設定に貼ったときだけ動く補助のスクリ�
 │   ├── yomiyasu_check.py            # lint と diff をまとめて実行し、記録を残す
 │   ├── yomiyasu_hook.py             # 任意のフック（設定に貼ったときだけ動く）
 │   ├── markdown_visibility.py       # Markdown構造・表示判定の共有モジュール
+│   ├── validate-template.mjs        # Cursor プラグインの形式を確かめる
 │   └── setup_corpus_static.py など   # 評価用コーパスを作った開発用のスクリプト
 ├── references/                       # スキル参照ドキュメント
 │   ├── gemini-syntax.md              # 構文変換原則
@@ -546,7 +575,12 @@ Claude Code か Codex の設定に貼ったときだけ動く補助のスクリ�
 │   ├── doc-types/                    # 文書の種類ごとの注意（13種類）
 │   ├── domains/                      # 分野別指針（tech, business, essay）
 │   └── lists/                        # 検査に使う語の一覧（名詞化、強める語、気持ちの語、慎重な言い方、事実の穴の候補、意味の薄いカタカナ語、評価を言い直す語の組）
-├── skills/                           # 配布用スキル（唯一のSKILL.mdと参照文書・検査ツール）
+├── plugins/                          # Cursor プラグイン（マルチプラグイン形式）
+│   └── yomiyasu/                     # skills/yomiyasu と同じスキルの写し
+│       ├── .cursor-plugin/plugin.json
+│       ├── assets/logo.jpg
+│       └── skills/yomiyasu/
+├── skills/                           # 配布用スキル（参照文書・検査ツール。SKILL.md の原本）
 │   └── yomiyasu/
 │       ├── .codex-plugin/plugin.json  # Codex でスキルを yomiyasu:yomiyasu の名前で載せるための設定
 │       ├── SKILL.md

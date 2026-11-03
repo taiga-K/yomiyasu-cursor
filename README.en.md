@@ -48,6 +48,8 @@ To install it as a Claude Code plugin, run these two commands in Claude Code.
 
 When installed as a Claude Code plugin, the skill is named `yomiyasu:yomiyasu`. Use that full name, as the slash completion shows it; a user reported that plain `yomiyasu` gave "Unknown skill".
 
+This repository is also a Cursor multi-plugin marketplace. The entry point is `.cursor-plugin/marketplace.json`, and the plugin is `plugins/yomiyasu/`. The skill files there match `skills/yomiyasu/`. On a team plan, open Dashboard → Plugins & MCPs → Add Marketplace → Import from Repo and paste `https://github.com/nanaism/yomiyasu`. To try it on your own machine, copy the `plugins/yomiyasu` folder to `~/.cursor/plugins/local/yomiyasu` and run Developer: Reload Window. A symlink to this repository is not loaded. The skill name is `yomiyasu`.
+
 For custom skills on Claude.ai (web), upload [yomiyasu.zip](https://github.com/nanaism/yomiyasu/releases/latest/download/yomiyasu.zip) from the latest release as it is, without unpacking it. The ZIP that GitHub's "Download ZIP" button makes contains the whole repository and may be rejected.
 
 Codex reads skills from `.agents/skills/` in the repository you work in. If you do not use the methods above, or you open the repository in Codex Cloud, copy the `skills/yomiyasu/` folder into `.agents/skills/yomiyasu/`: paste the commands below as one block in the root folder of that repository. Run the same commands again to update.
