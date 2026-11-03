@@ -188,8 +188,13 @@ class TestVersionStrings(unittest.TestCase):
         self.assertRegex(version, SEMVER)
         plugin = read_json(ROOT / ".claude-plugin" / "plugin.json")
         marketplace = read_json(ROOT / ".claude-plugin" / "marketplace.json")
+        cursor_plugin = read_json(ROOT / "plugins" / "yomiyasu" / ".cursor-plugin" / "plugin.json")
+        cursor_marketplace = read_json(ROOT / ".cursor-plugin" / "marketplace.json")
         self.assertEqual(plugin["version"], version)
         self.assertEqual(marketplace["plugins"][0]["version"], version)
+        self.assertEqual(cursor_plugin["version"], version)
+        self.assertEqual(cursor_marketplace["plugins"][0]["version"], version)
+        self.assertEqual(cursor_marketplace["metadata"]["version"], version)
 
     def test_skill_metadata_version(self):
         """2. SKILL.md の frontmatter の metadata.version が manifest の版と同じ。"""

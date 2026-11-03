@@ -89,7 +89,7 @@ draft.md を yomiyasu で読みやすくしてください。取引先の購買�
 
 2.0.2 から、エージェントが yomiyasu を使うのは利用者が名前を出して頼んだときと、スキルでの推敲をはっきり頼んだときだけです。「/yomiyasu」と送るか、依頼の文に「yomiyasu で」と書くか、`$yomiyasu:yomiyasu` のようにスキルの名前を `$` に続けて書けば呼べます。名前を出さずに「読みやすくして」とだけ頼んだときと、名前を出さずに記事やコミットメッセージを書かせたときは使われません。
 
-毎回使いたいときは、CLAUDE.md や AGENTS.md に1行を足します（[毎回 yomiyasu を使いたいとき](../README.md#毎回-yomiyasu-を使いたいとき)）。その1行に書くスキルの名前は入れ方で変わります。Claude Code では `npx skills add` と `gh skill install` で入れたときが `yomiyasu`、プラグインで入れたときが `yomiyasu:yomiyasu` です。Codex では `npx skills add` や `gh skill install` で入れたときも、`.agents/skills/` に置いたときも `yomiyasu:yomiyasu` になります。`npx openskills install` で入れたときと、Claude.ai に ZIP で登録したときは `yomiyasu` を使います。
+毎回使いたいときは、CLAUDE.md や AGENTS.md に1行を足します（[毎回 yomiyasu を使いたいとき](../README.md#毎回-yomiyasu-を使いたいとき)）。その1行に書くスキルの名前は入れ方で変わります。Claude Code では `npx skills add` と `gh skill install` で入れたときが `yomiyasu`、プラグインで入れたときが `yomiyasu:yomiyasu` です。Codex では `npx skills add` や `gh skill install` で入れたときも、`.agents/skills/` に置いたときも `yomiyasu:yomiyasu` になります。`npx openskills install` で入れたときと、Claude.ai に ZIP で登録したときは `yomiyasu` を使います。Cursor のプラグインで入れたときも `yomiyasu` です。
 
 ### Claude Code のプラグインで入れたとき
 

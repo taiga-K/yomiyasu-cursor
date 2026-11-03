@@ -8,10 +8,50 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "skills" / "yomiyasu"
 
 
+CURSOR_PACKAGE = ROOT / "plugins" / "yomiyasu" / "skills" / "yomiyasu"
+
+
+def _package_files(base):
+    """配布物として比べるファイル。Finder の .DS_Store と Python のキャッシュは除く。"""
+    skipped = {".DS_Store", "__pycache__"}
+    return sorted(
+        path.relative_to(base).as_posix()
+        for path in base.rglob("*")
+        if path.is_file()
+        and not any(part in skipped or part.endswith(".pyc") for part in path.relative_to(base).parts)
+    )
+
+
 class SkillPackageTests(unittest.TestCase):
     def test_single_discoverable_entrypoint(self):
+        # Cursor はプラグインの外へのシンボリックリンクを読まないので、skills/yomiyasu と同じ内容を
+        # plugins/yomiyasu/skills/yomiyasu に置く。定義は原本の1つで、写しはバイト列が同じである。
         entries = sorted(ROOT.rglob("SKILL.md"))
-        self.assertEqual(entries, [PACKAGE / "SKILL.md"])
+        self.assertEqual(entries, [CURSOR_PACKAGE / "SKILL.md", PACKAGE / "SKILL.md"])
+
+    def test_cursor_plugin_skill_matches_distribution(self):
+        relatives = _package_files(PACKAGE)
+        self.assertEqual(_package_files(CURSOR_PACKAGE), relatives)
+        self.assertIn("SKILL.md", relatives)
+        self.assertIn(".codex-plugin/plugin.json", relatives)
+        for relative in relatives:
+            with self.subTest(path=relative):
+                self.assertEqual((PACKAGE / relative).read_bytes(), (CURSOR_PACKAGE / relative).read_bytes())
+
+    def test_cursor_marketplace_points_at_plugin(self):
+        marketplace = json.loads((ROOT / ".cursor-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+        self.assertEqual(marketplace["name"], "yomiyasu")
+        self.assertEqual([entry["name"] for entry in marketplace["plugins"]], ["yomiyasu"])
+        self.assertEqual([entry["source"] for entry in marketplace["plugins"]], ["./plugins/yomiyasu"])
+        plugin = json.loads((ROOT / "plugins" / "yomiyasu" / ".cursor-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        claude = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        self.assertEqual(plugin["name"], "yomiyasu")
+        self.assertEqual(plugin["version"], claude["version"])
+        self.assertEqual(marketplace["plugins"][0]["version"], claude["version"])
+        self.assertEqual(marketplace["metadata"]["version"], claude["version"])
+        logo = ROOT / "plugins" / "yomiyasu" / plugin["logo"]
+        self.assertTrue(logo.is_file())
+        self.assertEqual(logo.read_bytes(), (ROOT / "assets" / "yomiyasu_logo.jpg").read_bytes())
 
     def test_plugin_points_to_skill_parent(self):
         manifest = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))

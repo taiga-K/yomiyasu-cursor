@@ -1,0 +1,19 @@
+{
+  "name": "yomiyasu",
+  "owner": {
+    "name": "nanaism",
+    "email": "datealife2525@gmail.com"
+  },
+  "metadata": {
+    "description": "AIが生成した日本語を、意味と条件を保って読みやすく整えるスキル",
+    "version": "2.5.0"
+  },
+  "plugins": [
+    {
+      "name": "yomiyasu",
+      "source": "./plugins/yomiyasu",
+      "description": "AIが生成した日本語を、意味と条件を保って読みやすく整えるスキル",
+      "version": "2.5.0"
+    }
+  ]
+}
